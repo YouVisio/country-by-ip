@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -12,7 +13,7 @@ namespace CountryByIp
     {
         event Action OnEnd;
         event Action<string> OnCountryComplete;
-        void Execute();
+        Task Execute();
     }
     internal sealed class DataUpdater : IDataUpdater
     {
@@ -39,7 +40,9 @@ namespace CountryByIp
         private void RunOnEnd() { if (OnEnd != null) OnEnd(); }
         private void RunOnCountryComplete(string country) { if (OnCountryComplete != null) OnCountryComplete(country); }
 
-        async void IDataUpdater.Execute()
+        // this is parallel code to compare performance
+        // with 8 code machine and remote SQL it takes less than 30 seconds to run
+        async Task IDataUpdater.Execute()
         {
             var ddl = _res.GetResource("CountryByIp.Files.DDL.sql");
             _db.NonQuery(ddl.Args(_conf.DbTableName));
@@ -76,14 +79,50 @@ namespace CountryByIp
                                 RunOnCountryComplete(ci.Name);
 
                             })
-                        .Unwrap())
-                    .ToArray());
+                        .Unwrap()
+                        )
+                    .ToArray()).ConfigureAwait(false);
 
             }
 
             RunOnEnd();
+
+            await Task.FromResult(true);
         }
 
+        /*
+        // this is sequential NON-parallel code to compare performance
+        // with 8 code machine and remote SQL it takes ~1 minute and 30 seconds
+        async Task IDataUpdater.Execute()
+        {
+            var ddl = _res.GetResource("CountryByIp.Files.DDL.sql");
+            _db.NonQuery(ddl.Args(_conf.DbTableName));
+
+            var countries = _countries.GetCountries();
+            foreach (var ci in countries)
+            {
+                using (var client = new WebClient())
+                {
+                    var str = client.DownloadString(_conf.CsvSiteRoot + ci.Code + ".csv");
+                    var ranges = _csv.GetRanges(str).ToList();
+                    const int batch = 300;
+                    while (ranges.Count != 0)
+                    {
+                        var currentNum = Math.Min(batch, ranges.Count);
+                        var sql = RangesToSql(ranges.Take(currentNum), ci.Name);
+                        _db.NonQuery(sql);
+
+                        ranges.RemoveRange(0, currentNum);
+                    }
+                    RunOnCountryComplete(ci.Name);
+                }
+            }
+
+            RunOnEnd();
+
+            await Task.FromResult(true);
+        }
+        */
         private string RangesToSql(IEnumerable<RangeOfIps> ranges, string name)
         {
             var sb = new StringBuilder("\nINSERT INTO [dbo].[" + _conf.DbTableName + "] (Country,FromIp,ToIp,[Count],Assigned) VALUES\n");
