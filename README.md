@@ -1,8 +1,9 @@
 country-by-ip
 =============
 
-This project is a command line too that takes the data generously http://www.nirsoft.net 
-and srores all the data into a single SQL Server table. On my 8 core machine and a remote Sql Server
+This project is a command line tool that takes the data about IP ranges for each country 
+generously offered by http://www.nirsoft.net as CSV files 
+and stores it into a single SQL Server table. On my 8 core machine and a remote Sql Server
 it takes less than 30 seconds to execute.
 
 Then you can check the country of a particular IP as such:

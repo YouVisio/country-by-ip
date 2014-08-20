@@ -56,7 +56,7 @@ namespace CountryByIp
                         {
                             var ranges = _csv.GetRanges(task.Result).ToList();
 
-                            const int batch = 500;
+                            const int batch = 300;
                             while (ranges.Count != 0)
                             {
                                 var currentNum = Math.Min(batch, ranges.Count);
