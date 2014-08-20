@@ -33,5 +33,5 @@ string IpLongToString(long ipLong)
 }
 ```
 
-You need to create /CountryByIp/CountryByIp/App.config from /CountryByIp/CountryByIp/App.config.sample
+You need to create **/CountryByIp/CountryByIp/App.config** from **/CountryByIp/CountryByIp/App.config.sample**
 
