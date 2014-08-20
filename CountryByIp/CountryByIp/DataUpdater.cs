@@ -51,29 +51,33 @@ namespace CountryByIp
 // ReSharper disable once CoVariantArrayConversion
 
                 await Task.WhenAll(countries.Select(ci => client
-                    .GetStringAsync(_conf.CsvSiteRoot + ci.Code + ".csv") // get CSV file
-                    .ContinueWith(async task => // store Ra
-                        {
-                            var ranges = _csv.GetRanges(task.Result).ToList();
-
-                            const int batch = 300;
-                            while (ranges.Count != 0)
+                        .GetStringAsync(_conf.CsvSiteRoot + ci.Code + ".csv") // get CSV file
+                        .ContinueWith(async task => // store Ra
                             {
-                                var currentNum = Math.Min(batch, ranges.Count);
-                                var sql = RangesToSql(ranges.Take(currentNum), ci.Name);
-                                await _db.NonQueryAsync(sql)
-                                    .ContinueWith(t =>
-                                    {
-                                        if (t.Exception != null)
-                                            _log.Error(ci.Name + "\n\n" + sql + "\n\n" + Convert.ToString(t.Exception));
-                                    });
+                                var ranges = _csv.GetRanges(task.Result).ToList();
 
-                                ranges.RemoveRange(0, currentNum);
-                            }
+                                const int batch = 300;
+                                while (ranges.Count != 0)
+                                {
+                                    var currentNum = Math.Min(batch, ranges.Count);
+                                    var sql = RangesToSql(ranges.Take(currentNum), ci.Name);
+                                    await _db.NonQueryAsync(sql)
+                                                .ContinueWith(t =>
+                                                {
+                                                    if (t.Exception != null)
+                                                        _log.Error( ci.Name + "\n\n" + 
+                                                                        sql + "\n\n" + 
+                                                                        Convert.ToString(t.Exception));
+                                                });
+
+                                    ranges.RemoveRange(0, currentNum);
+                                }
                             
-                            RunOnCountryComplete(ci.Name);
+                                RunOnCountryComplete(ci.Name);
 
-                        }).Unwrap()).ToArray());
+                            })
+                        .Unwrap())
+                    .ToArray());
 
             }
 
