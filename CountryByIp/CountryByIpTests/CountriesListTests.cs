@@ -9,7 +9,7 @@ namespace CountryByIpTests
         [Test]
         public void CanGetCountries()
         {
-            ICountriesList cl = new CountriesList();
+            ICountriesList cl = new CountriesList(new ResourceManager());
             var list = cl.GetCountries();
 
             Assert.That(list, Is.Not.Null);
