@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- use this file as a sample to recreate the missing App.config file -->
+<configuration>
+  <startup> 
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
+  </startup>
+  <connectionStrings>
+    <add name="CountryByIpDb" connectionString="YOUR_CONNECTION_STRING_GOES_HERE" providerName="System.Data.SqlClient"/>
+  </connectionStrings>
+  <appSettings>
+    <add key="DbTableName" value="yv_country_by_ip" />
+    <add key="CsvSiteRoot" value="http://www.nirsoft.net/countryip/" />
+  </appSettings>
+</configuration>
