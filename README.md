@@ -8,7 +8,7 @@ it takes less than 30 seconds to execute.
 Then you can check the country of a particular IP as such:
 
 ```sql
-SELECT TOP 1 Country FROM [dbo].[yv_country_by_ip] WHERE FromIp <= 3625512095 AND ToIp >= 3625512095
+SELECT TOP 1 Country FROM [dbo].[yv_country_by_ip] WHERE FromIp <= 1625512095 AND ToIp >= 1625512095
 ```
 
 The values are stored as BIGINT (sql equivalent of .NET Int64) 
