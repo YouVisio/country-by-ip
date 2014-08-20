@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace CountryByIp
@@ -122,7 +121,8 @@ namespace CountryByIp
 
             await Task.FromResult(true);
         }
-        */
+         */
+        
         private string RangesToSql(IEnumerable<RangeOfIps> ranges, string name)
         {
             var sb = new StringBuilder("\nINSERT INTO [dbo].[" + _conf.DbTableName + "] (Country,FromIp,ToIp,[Count],Assigned) VALUES\n");

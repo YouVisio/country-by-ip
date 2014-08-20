@@ -1,6 +1,8 @@
 country-by-ip
 =============
 
+Blog entry: http://blog.bodurov.com/Country-by-IP/
+
 This project is a command line tool that takes the data about IP ranges for each country 
 generously offered by http://www.nirsoft.net as CSV files 
 and stores it into a single SQL Server table. On my 8 core machine and a remote Sql Server
@@ -9,10 +11,10 @@ it takes less than 30 seconds to execute.
 Then you can check the country of a particular IP as such:
 
 ```sql
-SELECT TOP 1 Country FROM [dbo].[yv_country_by_ip] WHERE FromIp <= 1625512095 AND ToIp >= 1625512095
+SELECT TOP 1 Country FROM [dbo].[yv_country_by_ip] WHERE FromIp <= @TheIp AND ToIp >= @TheIp
 ```
 
-The values are stored as BIGINT (sql equivalent of .NET Int64) 
+@TheIp should be BIGINT (sql equivalent of .NET Int64 or long) 
 Some helper functions you may need:
 
 ```c#
@@ -33,5 +35,7 @@ string IpLongToString(long ipLong)
 }
 ```
 
-You need to create **/CountryByIp/CountryByIp/App.config** from **/CountryByIp/CountryByIp/App.config.sample**
+Please note that you need to create **/CountryByIp/CountryByIp/App.config** 
+from **/CountryByIp/CountryByIp/App.config.sample** with the connection string to your database 
+and the desired table name.
 
