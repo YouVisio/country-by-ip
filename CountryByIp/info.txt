@@ -1,5 +1,0 @@
-Check as
-
-SELECT TOP 1 Country FROM [dbo].[yv_country_by_ip] WHERE FromIp <= 3625172095 AND ToIp >= 3625172095
-
-

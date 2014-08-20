@@ -31,3 +31,6 @@ string IpLongToString(long ipLong)
     return b[3] + "." + b[2] + "." + b[1] + "." + b[0];
 }
 ```
+
+You need to create /CountryByIp/CountryByIp/App.config from /CountryByIp/CountryByIp/App.config.sample
+
