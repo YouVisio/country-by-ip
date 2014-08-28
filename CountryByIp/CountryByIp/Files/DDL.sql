@@ -31,5 +31,5 @@ CREATE NONCLUSTERED INDEX [IX_{0}_Country]
 
 
 CREATE NONCLUSTERED INDEX [IX_{0}_FromIp_ToIp] 
-	ON [dbo].[yv_country_by_ip]([FromIp], [ToIp]) INCLUDE ([Country])
+	ON [dbo].[{0}]([FromIp], [ToIp]) INCLUDE ([Country])
 
