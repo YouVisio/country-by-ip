@@ -30,10 +30,6 @@ CREATE NONCLUSTERED INDEX [IX_{0}_Country]
 	ON [dbo].[{0}]([Country])
 
 
-CREATE NONCLUSTERED INDEX [IX_{0}_FromIp] 
-	ON [dbo].[{0}]([FromIp])
-
-
-CREATE NONCLUSTERED INDEX [IX_{0}_ToIp] 
-	ON [dbo].[{0}]([ToIp] DESC) 
+CREATE NONCLUSTERED INDEX [IX_country_by_ip_FromIp_ToIp] 
+	ON [dbo].[yv_country_by_ip]([FromIp], [ToIp]) INCLUDE ([Country])
 
